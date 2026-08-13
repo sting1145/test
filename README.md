@@ -1,16 +1,26 @@
-# UI Automation Cashier — 熊猫掌柜收银台
+# 熊猫掌柜自动化测试仓库
+
+本仓库包含两个独立项目，互不影响：
+
+| 目录 | 说明 | 技术栈 |
+|------|------|--------|
+| **根目录** | 收银台 UI 自动化 | Python + Playwright |
+| **[ui-automation-python/](ui-automation-python/)** | 登录系统 UI + 接口自动化 | Python + Selenium + requests + pytest + Allure |
+
+---
+
+## 收银台 UI 自动化（根目录）
 
 基于 **Python + Playwright** 的收银台 UI 自动化项目，针对本地收银台程序（`http://127.0.0.1:9981`）设计。
 
-## 环境要求
+### 环境要求
 
 - Python 3.10+
 - 收银台程序已启动（窗口标题：收银台）
 
-## 快速开始
+### 快速开始
 
 ```bash
-cd ui-automation-cashier
 setup.bat
 .venv\Scripts\activate
 pytest
@@ -37,7 +47,7 @@ pytest
 python -m playwright install chromium
 ```
 
-## 配置
+### 配置
 
 在 `.env` 中配置测试账号：
 
@@ -49,7 +59,7 @@ CASHIER_PASSWORD=123456
 HEADLESS=true
 ```
 
-## 项目结构
+### 项目结构
 
 ```
 pages/
@@ -57,77 +67,31 @@ pages/
 utils/
   cashier_auth.py         # WebSocket 握手、登录 API、路由拦截
 tests/
-  test_cashier_login.py   # 登录用例（5 条）
+  test_cashier_login.py   # 登录用例
 ```
 
-## 测试用例
+### 一键运行（推荐）
 
-| 分类 | 用例 |
-|------|------|
-| 页面加载 | 应正确加载登录页并展示核心元素 |
-| 表单校验 | IP/账号/密码为空等 3 条校验 |
-| 正向登录 | 使用有效 IP、账号、密码登录成功 |
-
-## 一键运行（推荐）
-
-**双击**项目根目录下的：
-
-```
-run_tests_and_report.bat
-```
-
-会自动：运行测试 → 生成 Allure 报告 → 打开 HTML 报告。
+双击项目根目录下的 `run_tests_and_report.bat`。
 
 首次使用前双击 `setup.bat` 安装依赖。
 
-## 测试用例（6 条）
+### 报告说明
 
-| 分类 | 用例 |
-|------|------|
-| 页面加载 | 应正确加载登录页并展示核心元素 |
-| 表单校验 | IP/账号/密码为空等 3 条校验 |
-| 正向登录 | 密码 `123456` 登录成功 |
-| 负向登录 | 密码 `1234567` 登录失败 |
-
-## 报告说明
-
-- 最新报告：`reports/latest-report.html`（双击打开）
+- 最新报告：`reports/latest-report.html`
 - 历史索引：`reports/index.html`
-- 失败用例自动截图，附在 Allure 报告中
 
-## 手动运行
+---
+
+## 登录系统 UI + 接口自动化（ui-automation-python/）
+
+针对 [熊猫掌柜登录](https://passport.xiongmaozhanggui.com/account/login) 的 Web UI 与接口自动化。
 
 ```bash
-# 运行全部用例
-pytest
-
-# 只跑正向登录
-pytest -m positive
-
-# 有界面调试
-set HEADLESS=false
-pytest -m positive
-
-# 只跑登录相关
-pytest -m login
+cd ui-automation-python
+setup.bat   # 或按 README 安装依赖
+run_ui_tests.bat
+run_api_tests.bat
 ```
 
-## 技术说明
-
-收银台是 CEF 内嵌 Web 应用。登录流程依赖：
-
-1. WebSocket 获取 `token/nid`（`172.16.99.70:16510`）
-2. 云端登录 API
-3. 页面内 `to_browser` 握手
-
-测试通过 Playwright 拦截登录 API、模拟握手，并校验 `localStorage.userinfo` 写入成功。
-
-## 为什么用 Playwright 而不是 Selenium
-
-本项目选用 **Playwright**，因为：
-
-- 原生支持 `page.route()` 拦截请求（绕过浏览器 CORS）
-- 与现有 TypeScript 版收银台自动化方案一致
-- 对本地 `127.0.0.1:9981` 页面支持更好
-
-如需 Selenium 版本，可将 Page Object 中的定位器迁移到 `selenium.webdriver`，但登录 API 拦截需改用其他方式（如代理或直接在页面注入响应）。
+详细说明见 [ui-automation-python/README.md](ui-automation-python/README.md)。
