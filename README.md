@@ -1,5 +1,7 @@
 # UI Automation Cashier — 熊猫掌柜收银台
 
+> **GitHub 仓库**：[sting1145/ui-automation-cashier](https://github.com/sting1145/ui-automation-cashier)（说明：UI自动化收银台）
+
 基于 **Python + Playwright** 的收银台 UI 自动化项目，针对本地收银台程序（http://127.0.0.1:9981）设计。
 
 ## 环境要求
